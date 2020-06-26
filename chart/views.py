@@ -148,7 +148,8 @@ def chart_data(request): # 접속 경로 'json-example/data/'에 대응하는 �
 
 
 import pandas as pd
-
+import pandas_highcharts
+from pandas_highcharts.core import serialize
 
 def covid19_view(request):
     df = pd.read_csv('https://raw.githubusercontent.com/datasets/covid-19/master/data/countries-aggregated.csv', parse_dates=['Date'])
@@ -166,5 +167,16 @@ def covid19_view(request):
     covid_cf.set_index(['Date'], inplace=True)
     covid_cf.columns = countries
 
-    return render(request, 'covid_19.html', {'df': df, 'df_cf': df_cf, 'covid_cf':covid_cf})
+    populations = {'Korea, South': 51269185, 'Germany': 83783942, 'Japan': 126476461, 'United Kingdom': 67886011,
+                   'US': 331002651, 'France': 65273511}
+
+    # 확진자 수 인구 대비 건수 계산
+    percapita_cf = covid_cf.copy()
+    for country in list(percapita_cf.columns):
+        percapita_cf[country] = percapita_cf[country] / populations[country] * 100000
+
+
+    chart = pandas_highcharts.core.serialize(percapita_cf, render_to='my-chart', title='COVID 19', output_type='json')
+
+    return render(request, 'covid_19.html', {'chart':chart})
 
