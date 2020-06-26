@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Django Highcharts Example</title>
+</head>
+<body>
+    <a href="{% url 'home' %}">Return to homepage</a>
+    <div id="container"></div>
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script>
+        Highcharts.chart('container', {
+    chart: {
+        type: 'line'
+    },
+    title: {
+        text: 'COVID 19'
+    },
+    xAxis: [{
+        categories: [ covid_cf['Date'] ],
+        crosshair: true
+    }],
+    yAxis: [{ // Primary yAxis
+        labels: {
+            format: '{value}%'
+        },
+        title: {
+            text: 'of Cases_Confirmed'
+        }
+    }],
+    tooltip: {
+        shared: true
+    },
+    plotOptions: {
+        series: {
+            label: {
+                connectorAllowed: false
+            },
+            marker: {
+                enabled: false
+            }
+        }
+    },
+    series: [{
+        name: 'Korea, South',
+        data: [
+            covid_cf['Korea, South']
+        ],
+          color: 'green'
+    },{
+        name: 'Germany',
+        data: [
+            covid_cf['Germany']
+        ],
+          color: 'red'
+    },{
+        name: 'Japan',
+        data: [
+            covid_cf['Japan']
+        ],
+          color: 'blue'
+    }, {
+        name: 'United Kindom',
+        data: [
+            covid_cf['United Kindom']
+        ],
+          color: 'pink'
+    },{
+        name: 'US',
+        data: [
+            covid_cf['US']
+        ],
+          color: 'purple'
+    },{
+        name: 'Franch',
+        data: [
+            covid_cf['Franch']
+        ],
+          color: 'orange'
+    }]
+  });
+    </script>
+</body>
+</html>
